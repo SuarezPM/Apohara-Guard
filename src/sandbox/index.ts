@@ -1,20 +1,26 @@
 /**
- * 5-layer kernel sandbox for Apohara Guard ML inference subprocesses.
+ * 3-layer kernel sandbox (extendable to 5) for Apohara Guard ML inference subprocesses.
  *
- * Layers (Linux only; macOS/Windows fall back to plain spawn with WARN log):
- *  1. mount namespace (unshare --mount / bwrap --unshare-all): hides host
- *     filesystem outside allowed_read_paths / allowed_write_paths
- *  2. user namespace (unshare --user --map-root-user): drops capabilities
- *  3. Landlock LSM (RULESET_ABI v3): filesystem access restriction
- *     (delivered indirectly via bwrap's bind-mount whitelist when present;
- *     direct Landlock requires C helper — tracked in docs/research/sandbox-design.md)
- *  4. seccomp-bpf filter: syscall allow-list
- *     (delivered via bwrap when launched with --seccomp; raw bpf compile
- *     also requires C helper — see design doc)
- *  5. RLIMIT_AS + RLIMIT_CPU: memory + CPU caps (via prlimit wrapper)
+ * Active layers (Linux, this commit):
+ *  1. mount namespace (via bwrap --unshare-all): hides host filesystem outside
+ *     allowed_read_paths
+ *  2. user namespace (via bwrap --unshare-all): drops capabilities; maps to
+ *     non-root inside the sandbox
+ *  3. RLIMIT_AS / RLIMIT_CPU (via prlimit wrapping): memory + CPU caps
+ *
+ * Planned layers (Phase 3):
+ *  4. Landlock LSM (RULESET_ABI v3): filesystem access restriction at LSM
+ *     level — requires Linux 5.13+, currently delivered indirectly via
+ *     bwrap's bind-mount whitelist
+ *  5. seccomp-bpf filter: syscall allow-list (ML_INFERENCE_SYSCALLS defined
+ *     below); requires libseccomp-generated bpf blob loaded via bwrap
+ *     --seccomp <fd>
  *
  * Ported from RAPTOR's core/sandbox/{_spawn,landlock,seccomp,proxy}.py
  * (MIT licensed; attribution in THIRD_PARTY_NOTICES.md).
+ *
+ * macOS/Windows: throws unless policy.allow_unsupported_platform_fallback=true,
+ * in which case falls back to plain spawn() with WARN log.
  */
 import { type ChildProcess, spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
@@ -81,7 +87,7 @@ function hasPrlimit(): boolean {
 }
 
 /**
- * Spawn a subprocess wrapped in the 5-layer sandbox.
+ * Spawn a subprocess wrapped in the 3-layer kernel sandbox (layers 4-5 planned for Phase 3).
  *
  * On non-Linux platforms (Darwin, Windows): throws unless
  * `policy.allow_unsupported_platform_fallback === true`, in which case

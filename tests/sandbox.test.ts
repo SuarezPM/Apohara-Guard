@@ -1,5 +1,5 @@
 /**
- * Tests for src/sandbox — 5-layer kernel sandbox.
+ * Tests for src/sandbox — 3-layer kernel sandbox (5-layer target in Phase 3).
  *
  * Run via:  bun test tests/sandbox.test.ts
  *
