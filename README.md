@@ -8,11 +8,11 @@ Part of the cross-AI code verification trinity submitted to TechEx 2026:
 - **[apohara-probant](https://github.com/SuarezPM/apohara-probant)** — Backend + frontend for the 12-vendor adversarial ensemble (Apache-2.0)
 - **[apohara-aegis](https://github.com/SuarezPM/apohara-aegis)** — Multi-vendor judge adapters (Apache-2.0)
 - **[Apohara_Context_Forge](https://github.com/SuarezPM/Apohara_Context_Forge)** — INV-15 KV-cache isolation + Z3 SMT formal proof paper, Zenodo DOI [10.5281/zenodo.20114594](https://doi.org/10.5281/zenodo.20114594) (Apache-2.0)
-- **Apohara Guard** (this repo) — Sandbox + scanner primitives (AGPL-3.0)
+- **Apohara Guard** (this repo) — Sandbox + scanner primitives (Apache-2.0; was AGPL-3.0 until 2026-06-02 per the consolidated monorepo's Phase 5 relicense)
 
-## Why AGPL-3.0?
+## License
 
-The other three repos ship under Apache-2.0 to lower friction for enterprise adoption of safety tooling. Apohara Guard is specifically AGPL-3.0 so that downstream improvements to the sandbox + scanner detection patterns flow back to the public commons.
+Apache-2.0. Originally AGPL-3.0; relicensed 2026-06-02 to Apache-2.0 by the sole copyright holder (Pablo M. Suarez) as part of consolidating the apohara-* repos into a single monorepo (apohara-probanza). The AGPL copyleft intent is satisfied by the project's continued public development on GitHub; the permissive license simplifies integration with the rest of the monorepo (which is Apache-2.0).
 
 ## Status
 
@@ -40,7 +40,7 @@ Honest disclosures (per Apohara `AUDIT.md` culture):
 
 ## License
 
-[GNU Affero General Public License v3.0 only](LICENSE) — AGPL-3.0-only.
+[Apache License 2.0](LICENSE) — Apache-2.0 (relicensed from AGPL-3.0 on 2026-06-02).
 
 ## Contact
 

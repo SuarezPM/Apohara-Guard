@@ -1,4 +1,6 @@
 /**
+ * SPDX-License-Identifier: Apache-2.0
+ * (was AGPL-3.0-only until 2026-06-02)
  * 3-layer kernel sandbox (extendable to 5) for Apohara Guard ML inference subprocesses.
  *
  * Active layers (Linux, this commit):
